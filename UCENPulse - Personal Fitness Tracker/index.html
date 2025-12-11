@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" defer></script>
-    <script> src="app.js" defer</script>
+    <script> src="app.js"</script>
 </head>
 <body>
     <header class="site-header">
@@ -129,7 +129,10 @@
         </section>
 
         <section class="card small" aria-labelledby="controls-heading">
-
+            <h2 id="controls-heading">Utilities</h2>
+            <button id="seed-data">Seed sample data</button>
+            <button id="clear-data">Clear all data</button>
+            <p class="note">Data is stored locally in your browser. no account needed for this demo</p>
         </section>
     </main>
 
