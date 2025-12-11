@@ -1,146 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UCENPulse - Personal Fitness Tracker</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" defer></script>
-    <script> src="app.js"</script>
-</head>
-<body>
-    <header class="site-header">
-        <h1>UCENPulse</h1>
-        <p class="tagline">Personal fitness & wellness tracker demo</p>
-    </header>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>UCENPulse - Personal Fitness Tracker</title>
+        <link rel="stylesheet" href="styles.css">
+        <!-- Chart.js CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" defer></script>
+        <script> src="app.js"</script>
+    </head>
+    <body>
+        <header class="site-header">
+            <h1>UCENPulse</h1>
+            <p class="tagline">Personal fitness & wellness tracker demo</p>
+        </header>
 
-    <main class="container" id="main" role="main">
-        <section aria-labelledby="log-activity-heading" class="card">
-            <h2 id="log-activity-heading">Activity</h2>
-            <form id="activity-form" aria-describedby="activity-form-desc">
-                <p id="activity-form-desc" class="sr-only">Add a new activity (type, duration, date, notes).</p>
+        <main>
+            <section aria-labelledby="activity-title">
+                <h2 id="activity-title">Log Activity</h2>
+                <form id="activity-form">
 
-                <label for="activity-type">Activity type</label>
-                <select id="activity-type" required>
-                    <option value="">-Select-</option>
-                    <option>Running</option>
-                    <option>Cycling</option>
-                    <option>Gym</option>
-                    <option>Walking</option>
-                    <option>Swimming</option>
-                    <option>Other</option>
-                </select>
+                    <fieldset>
+                    <legend>Activity Type</legend>
 
-                <label for="activity-duration">Duration (minutes)</label>
-                <input id="activity-duration" type="number" min="1" required>
+                        <label><input type="radio" name="activityType" value="Running" required>Running</label>
+                        <label><input type="radio" name="activityType" value="Cycling" required>Cycling</label>
+                        <label><input type="radio" name="activityType" value="Gym" required>Gym</label>
+                        <label><input type="radio" name="activityType" value="Walking" required>Walking</label>
+                        <label><input type="radio" name="activityType" value="Swimming" required>Swimming</label>
+                        <label><input type="radio" name="activityType" value="Other" required>Other</label>
+                    </fieldset>
 
-                <label for="activity-date">Date</label>
-                <input type="date" id="activity-date" required>
-
-                <label for="activity-notes">Notes (These are Optional)</label>
-                <textarea id="activity-notes" rows="2" placeholder="E.g. great training, feel good."></textarea>
-
-                <button type="submit" id="add-activity">Add Activity</button>
-                <div aria-live="polite" id="activity-feedback" class="feedback" role="status"></div>
-            </form>
-
-        </section>
-
-        <section aria-labelledby="metrics-heading" class="card">
-            <h2 id="metrics-heading">Health Updates</h2>
-            <form id="metrics-form" aria-describedby="metrics-form-desc">
-                <p id="metrics-form-desc" class="sr-only">Here you can quickly add your daily health updates(metrics) (steps, water, sleep, calories)</p>
-
-                <label for="metric-date">Date</label>
-                <input id="metric-date" type="date" required>
-
-                <label for="metric-steps">Steps</label>
-                <input id="metric-steps" type="number" min="0">
-
-                <label for="metric-water">Water(ml)</label>
-                <input id="metric-water" type="number" min="0">
-
-                <label for="metric-sleep">Sleep (hours)</label>
-                <input id="metric-sleep" type="number" min="0" step="0.25" >
-
-                <label for="metric-calories">Calories Burned</label>
-                <input id="metric-calories" type="number" min="0" >
-
-                <button type="submit" id="add-metric">Save Health Data</button>
-                <div aria-live="polite" id="metric-feedback" class="feedback" role="status"></div>
-            </form>
-        </section>
-
-        <section aria-labelledby="dashboard-heading" class="card dashboard">
-            <h2 id="dashboard-heading">Dashboard Overview</h2>
-
-            <div class="dashboard-grid">
-                <div class="summary" id="summary" aria-live="polite">
-                    <h3>Summary</h3>
-                    <ul>
-                        <li id="summary-activities">Activities: 0</li>
-                        <li id="summary-steps">Steps (Last 7 Days): 0</li>
-                        <li id="summary-water">Water (Last 7 Days): 0 ml</li>
-                        <li id="summary-sleep">Average Sleep (Last 7 Days): 0 h</li>
-                    </ul>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-controls">
-                        <label for="activity-filter">Filter Activity:</label>
-                        <select id="activity-filter">
-                            <option value="all"></option>
-                        </select>
-
-                        <label for="range-select">Range</label>
-                        <select id="range-select">
-                            <option value="7">Last 7 Days</option>
-                            <option value="30">Last 30 Days</option>
-                            <option value="90">Last 90 Days</option>
-                        </select>
+                    <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <input id="duration" type="number" min="1" required>
                     </div>
-                    <canvas id="activityChart" aria-label="Activity breakdown chart" role="log"></canvas>
+                    
+                    <div class="form-group">
+                    <label for="activity-notes">Notes (These are Optional)</label>
+                    <textarea id="activity-notes" rows=3"></textarea>
                     </div>
-                    <div class="chart-card">
-                        <div class="chart-controls">
-                            <label for="metric-select">Metrics</label>
-                            <select id="metric-select">
-                                <option value="steps">Steps</option>
-                                <option value="water">Water</option>
-                                <option value="sleep">Sleep</option>
-                                <option value="calories">Calories</option>
-                            </select>
 
-                            <label for="metric-range">Range</label>
-                            <select id="metric-range">
-                                <option value="7">Last 7 Days</option>
-                                <option value="30">Last 30 Days</option>
-                                <option value="90">Last 90 Days</option>
-                            </select>
+                    <button type="submit">Add Activity</button>
+
+                    <p aria-live="polite" id="activity-feedback"></p>
+
+                </form>
+            </section>
+
+            <section aria-labelledby="metrics-title">
+                <h2 id="metrics-heading">Daily Health Updates</h2>
+                
+                <form id="metrics-form">
+
+                    <div class="form-group">
+                    <label for="steps">Steps</label>
+                    <input id="steps" type="number" min="0">
                     </div>
-                    <canvas id="metricChart" aria-label="Metric trend chart" role="img"></canvas>
-                </div>
+
+                    <div class="form-group">
+                    <label for="water">Water Intake (ml)</label>
+                    <input id="water" type="number" min="0">
+                    </div>
+
+                    <div class="form-group">
+                    <label for="sleep">Sleep Hours</label>
+                    <input id="sleep" type="number" min="0" step="0.1" >
+                    </div>
+
+                    <div class="form-group">
+                    <label for="calories">Calories Burned</label>
+                    <input id="calories" type="number" min="0" >
+                    </div>
+
+                    <button type="submit">Save Health Data</button>
+
+                    <p aria-live="polite" id="metric-status"> </p>
+                    
+                </form>
+            </section>
+
+            <section aria-labelledby="charts-title">
+            <h2 id="charts-title">Progress Charts</h2>
+
+            <!-- Range selector buttons -->
+            <div class="range-buttons">
+                <p>View Range:</p>
+                <button type="button" data-range="7">Last 7 Days</button>
+                <button type="button" data-range="30">Last 30 Days</button>
+                <button type="button" data-range="90">Last 90 Days</button>
             </div>
 
-            <div class="recend card" id="recent">
-                <h3>Recent activity</h3>
-            </div>
-        </section>
+            <article>
+                <h3>Activity Duration Trend</h3>
+                <canvas id="activityChart" aria-label="Activity duration chart showing performance over time"></canvas>
+            </article>
 
-        <section class="card small" aria-labelledby="controls-heading">
-            <h2 id="controls-heading">Utilities</h2>
-            <button id="seed-data">Seed sample data</button>
-            <button id="clear-data">Clear all data</button>
-            <p class="note">Data is stored locally in your browser. no account needed for this demo</p>
-        </section>
-    </main>
+            <article>
+                <h3>Health Metrics Trend</h3>
+                <canvas id="metricChart" aria-label="Health metrics chart displaying daily value trends"></canvas>
+            </article>
+            
+            <section aria-labelledby="recent-title">
+                <h2 id="recent-title">Recent Activity</h2>
 
-    <footer>
-        <p>UCENPulse demo - keeping track of your Fitness</p>
-    </footer>
-    <style>
-        .sr-only { position: absolute; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
-    </style>
-</body>
-</html>
+                <ul id="recent-list"></ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>UCENPulse demo - keeping track of your Fitness</p>
+        </footer>
+
+    </body>
+    </html>
