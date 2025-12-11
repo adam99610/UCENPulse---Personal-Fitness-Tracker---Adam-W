@@ -72,11 +72,63 @@
             </form>
         </section>
 
-        <section>
+        <section aria-labelledby="dashboard-heading" class="card dashboard">
+            <h2 id="dashboard-heading">Dashboard Overview</h2>
 
+            <div class="dashboard-grid">
+                <div class="summary" id="summary" aria-live="polite">
+                    <h3>Summary</h3>
+                    <ul>
+                        <li id="summary-activities">Activities: 0</li>
+                        <li id="summary-steps">Steps (Last 7 Days): 0</li>
+                        <li id="summary-water">Water (Last 7 Days): 0 ml</li>
+                        <li id="summary-sleep">Average Sleep (Last 7 Days): 0 h</li>
+                    </ul>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-controls">
+                        <label for="activity-filter">Filter Activity:</label>
+                        <select id="activity-filter">
+                            <option value="all"></option>
+                        </select>
+
+                        <label for="range-select">Range</label>
+                        <select id="range-select">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                    </div>
+                    <canvas id="activityChart" aria-label="Activity breakdown chart" role="log"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-controls">
+                            <label for="metric-select">Metrics</label>
+                            <select id="metric-select">
+                                <option value="steps">Steps</option>
+                                <option value="water">Water</option>
+                                <option value="sleep">Sleep</option>
+                                <option value="calories">Calories</option>
+                            </select>
+
+                            <label for="metric-range">Range</label>
+                            <select id="metric-range">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="90">Last 90 Days</option>
+                            </select>
+                    </div>
+                    <canvas id="metricChart" aria-label="Metric trend chart" role="img"></canvas>
+                </div>
+            </div>
+
+            <div class="recend card" id="recent">
+                <h3>Recent activity</h3>
+            </div>
         </section>
 
-        <section>
+        <section class="card small" aria-labelledby="controls-heading">
 
         </section>
     </main>
