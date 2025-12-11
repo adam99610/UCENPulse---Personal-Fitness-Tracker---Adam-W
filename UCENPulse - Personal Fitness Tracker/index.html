@@ -47,8 +47,29 @@
 
         </section>
 
-        <section>
+        <section aria-labelledby="metrics-heading" class="card">
+            <h2 id="metrics-heading">Health Updates</h2>
+            <form id="metrics-form" aria-describedby="metrics-form-desc">
+                <p id="metrics-form-desc" class="sr-only">Here you can quickly add your daily health updates(metrics) (steps, water, sleep, calories)</p>
 
+                <label for="metric-date">Date</label>
+                <input id="metric-date" type="date" required>
+
+                <label for="metric-steps">Steps</label>
+                <input id="metric-steps" type="number" min="0">
+
+                <label for="metric-water">Water(ml)</label>
+                <input id="metric-water" type="number" min="0">
+
+                <label for="metric-sleep">Sleep (hours)</label>
+                <input id="metric-sleep" type="number" min="0" step="0.25" >
+
+                <label for="metric-calories">Calories Burned</label>
+                <input id="metric-calories" type="number" min="0" >
+
+                <button type="submit" id="add-metric">Save Health Data</button>
+                <div aria-live="polite" id="metric-feedback" class="feedback" role="status"></div>
+            </form>
         </section>
 
         <section>
