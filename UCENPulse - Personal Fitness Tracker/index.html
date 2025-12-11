@@ -10,12 +10,40 @@
     <script> src="app.js" defer</script>
 </head>
 <body>
-    <header>
-
+    <header class="site-header">
+        <h1>UCENPulse</h1>
+        <p class="tagline">Personal fitness & wellness tracker demo</p>
     </header>
 
-    <main>
-        <section>
+    <main class="container" id="main" role="main">
+        <section aria-labelledby="log-activity-heading" class="card">
+            <h2 id="log-activity-heading">Activity</h2>
+            <form id="activity-form" aria-describedby="activity-form-desc">
+                <p id="activity-form-desc" class="sr-only">Add a new activity (type, duration, date, notes).</p>
+
+                <label for="activity-type">Activity type</label>
+                <select id="activity-type" required>
+                    <option value="">-Select-</option>
+                    <option>Running</option>
+                    <option>Cycling</option>
+                    <option>Gym</option>
+                    <option>Walking</option>
+                    <option>Swimming</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="activity-duration">Duration (minutes)</label>
+                <input id="activity-duration" type="number" min="1" required>
+
+                <label for="activity-date">Date</label>
+                <input type="date" id="activity-date" required>
+
+                <label for="activity-notes">Notes (These are Optional)</label>
+                <textarea id="activity-notes" rows="2" placeholder="E.g. great training, feel good."></textarea>
+
+                <button type="submit" id="add-activity">Add Activity</button>
+                <div aria-live="polite" id="activity-feedback" class="feedback" role="status"></div>
+            </form>
 
         </section>
 
