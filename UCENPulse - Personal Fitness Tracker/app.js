@@ -77,3 +77,22 @@ metricsForm.addEventListener("submit", (e) => {
     metricsForm.reset();
     updateMetricChart();
 });
+//Recent Activity List
+function updateRecentActivity() {
+    const activities = getStored("activities").slice(-5).reverse(); // Last 5 entries
+    recentList.innerHTML = "";
+
+    if (activities.length === 0) {
+        recentList.innerHTML = "<li>No activities logged yet.</li>";
+        return;
+    }
+
+    activities.forEach((act) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <strong>${act.type}</strong> – ${act.duration} mins 
+            <br><small>${new Date(act.date).toLocaleString()}</small>
+        `;
+        recentList.appendChild(li);
+    });
+}
