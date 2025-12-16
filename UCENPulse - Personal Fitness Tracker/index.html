@@ -1,116 +1,112 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>UCENPulse - Personal Fitness Tracker</title>
-        <link rel="stylesheet" href="styles.css">
-        <!-- Chart.js CDN -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" defer></script>
-        <script> src="app.js"</script>
-    </head>
-    <body>
-        <header class="site-header">
-            <h1>UCENPulse</h1>
-            <p class="tagline">Personal fitness & wellness tracker demo</p>
-        </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCENPulse - Personal Fitness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
 
-        <main>
-            <section aria-labelledby="activity-title">
-                <h2 id="activity-title">Log Activity</h2>
-                <form id="activity-form">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
 
-                    <fieldset>
-                    <legend>Activity Type</legend>
+<body>
+<header class="site-header">
+    <h1>UCENPulse</h1>
+    <p class="tagline">Personal fitness & wellness tracker demo</p>
+</header>
 
-                        <label><input type="radio" name="activityType" value="Running" required>Running</label>
-                        <label><input type="radio" name="activityType" value="Cycling" required>Cycling</label>
-                        <label><input type="radio" name="activityType" value="Gym" required>Gym</label>
-                        <label><input type="radio" name="activityType" value="Walking" required>Walking</label>
-                        <label><input type="radio" name="activityType" value="Swimming" required>Swimming</label>
-                        <label><input type="radio" name="activityType" value="Other" required>Other</label>
-                    </fieldset>
+<main>
 
-                    <div class="form-group">
-                    <label for="duration">Duration (minutes)</label>
-                    <input id="duration" type="number" min="1" required>
-                    </div>
-                    
-                    <div class="form-group">
-                    <label for="activity-notes">Notes (These are Optional)</label>
-                    <textarea id="activity-notes" rows=3"></textarea>
-                    </div>
+<section aria-labelledby="activity-title">
+    <h2 id="activity-title">Log Activity</h2>
 
-                    <button type="submit">Add Activity</button>
+    <form id="activity-form">
+        <fieldset>
+            <legend>Activity Type</legend>
+            <label><input type="radio" name="activityType" value="Running" required> Running</label>
+            <label><input type="radio" name="activityType" value="Cycling"> Cycling</label>
+            <label><input type="radio" name="activityType" value="Gym"> Gym</label>
+            <label><input type="radio" name="activityType" value="Walking"> Walking</label>
+            <label><input type="radio" name="activityType" value="Swimming"> Swimming</label>
+            <label><input type="radio" name="activityType" value="Other"> Other</label>
+        </fieldset>
 
-                    <p aria-live="polite" id="activity-feedback"></p>
+        <div class="form-group">
+            <label for="duration">Duration (minutes)</label>
+            <input id="duration" type="number" min="1" required>
+        </div>
 
-                </form>
-            </section>
+        <div class="form-group">
+            <label for="activity-notes">Notes (optional)</label>
+            <textarea id="activity-notes" rows="3"></textarea>
+        </div>
 
-            <section aria-labelledby="metrics-title">
-                <h2 id="metrics-heading">Daily Health Updates</h2>
-                
-                <form id="metrics-form">
+        <button type="submit">Add Activity</button>
+        <p id="activity-status" aria-live="polite"></p>
+    </form>
+</section>
 
-                    <div class="form-group">
-                    <label for="steps">Steps</label>
-                    <input id="steps" type="number" min="0">
-                    </div>
+<section aria-labelledby="metrics-heading">
+    <h2 id="metrics-heading">Daily Health Updates</h2>
 
-                    <div class="form-group">
-                    <label for="water">Water Intake (ml)</label>
-                    <input id="water" type="number" min="0">
-                    </div>
+    <form id="metrics-form">
+        <div class="form-group">
+            <label for="steps">Steps</label>
+            <input id="steps" type="number" min="0">
+        </div>
 
-                    <div class="form-group">
-                    <label for="sleep">Sleep Hours</label>
-                    <input id="sleep" type="number" min="0" step="0.1" >
-                    </div>
+        <div class="form-group">
+            <label for="water">Water Intake (ml)</label>
+            <input id="water" type="number" min="0">
+        </div>
 
-                    <div class="form-group">
-                    <label for="calories">Calories Burned</label>
-                    <input id="calories" type="number" min="0" >
-                    </div>
+        <div class="form-group">
+            <label for="sleep">Sleep Hours</label>
+            <input id="sleep" type="number" min="0" step="0.1">
+        </div>
 
-                    <button type="submit">Save Health Data</button>
+        <div class="form-group">
+            <label for="calories">Calories Burned</label>
+            <input id="calories" type="number" min="0">
+        </div>
 
-                    <p aria-live="polite" id="metric-status"> </p>
-                    
-                </form>
-            </section>
+        <button type="submit">Save Health Data</button>
+        <p id="metric-status" aria-live="polite"></p>
+    </form>
+</section>
 
-            <section aria-labelledby="charts-title">
-            <h2 id="charts-title">Progress Charts</h2>
+<section aria-labelledby="charts-title">
+    <h2 id="charts-title">Progress Charts</h2>
 
-            <!-- Range selector buttons -->
-            <div class="range-buttons">
-                <p>View Range:</p>
-                <button type="button" data-range="7">Last 7 Days</button>
-                <button type="button" data-range="30">Last 30 Days</button>
-                <button type="button" data-range="90">Last 90 Days</button>
-            </div>
+    <div class="range-buttons">
+        <p>View Range:</p>
+        <button type="button" data-range="7">Last 7 Days</button>
+        <button type="button" data-range="30">Last 30 Days</button>
+        <button type="button" data-range="90">Last 90 Days</button>
+    </div>
 
-            <article>
-                <h3>Activity Duration Trend</h3>
-                <canvas id="activityChart" aria-label="Activity duration chart showing performance over time"></canvas>
-            </article>
+    <article>
+        <h3>Activity Duration Trend</h3>
+        <canvas id="activityChart" aria-label="Activity duration chart"></canvas>
+    </article>
 
-            <article>
-                <h3>Health Metrics Trend</h3>
-                <canvas id="metricChart" aria-label="Health metrics chart displaying daily value trends"></canvas>
-            </article>
-            
-            <section aria-labelledby="recent-title">
-                <h2 id="recent-title">Recent Activity</h2>
+    <article>
+        <h3>Health Metrics Trend</h3>
+        <canvas id="metricChart" aria-label="Health metrics chart"></canvas>
+    </article>
+</section>
 
-                <ul id="recent-list"></ul>
-            </section>
-        </main>
+<section aria-labelledby="recent-title">
+    <h2 id="recent-title">Recent Activity</h2>
+    <ul id="recent-list"></ul>
+</section>
 
-        <footer>
-            <p>UCENPulse demo - keeping track of your Fitness</p>
-        </footer>
+</main>
 
-    </body>
-    </html>
+<footer>
+    <p>UCENPulse demo – keeping track of your fitness</p>
+</footer>
+</body>
+</html>

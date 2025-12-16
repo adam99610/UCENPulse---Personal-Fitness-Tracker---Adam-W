@@ -167,3 +167,8 @@ function updateMetricChart() {
         }
     });
 }
+
+//Initialise App
+updateRecentActivity();
+updateActivityChart();
+updateMetricChart();
