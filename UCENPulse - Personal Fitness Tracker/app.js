@@ -114,3 +114,27 @@ rangeButtons.forEach(btn => {
         updateMetricChart();
     });
 });
+
+//Activity Chart (Duration Over Time)
+function updateActivityChart() {
+    const activities = filterByRange(getStored("activities"), currentRange);
+
+    const labels = activities.map(a => new Date(a.date).toLocaleDateString());
+    const data = activities.map(a => a.duration);
+
+    const ctx = document.getElementById("activityChart");
+
+    if (activityChart) activityChart.destroy();
+
+    activityChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                label: "Duration (minutes)",
+                data,
+                borderWidth: 2
+            }]
+        }
+    });
+}
