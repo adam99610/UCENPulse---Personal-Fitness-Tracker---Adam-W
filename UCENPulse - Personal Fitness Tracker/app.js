@@ -138,3 +138,32 @@ function updateActivityChart() {
         }
     });
 }
+
+//Metrics Chart (Steps, Water, Sleep, Calories)
+function updateMetricChart() {
+    const metrics = filterByRange(getStored("metrics"), currentRange);
+
+    const labels = metrics.map(m => new Date(m.date).toLocaleDateString());
+
+    const steps = metrics.map(m => m.steps);
+    const water = metrics.map(m => m.water);
+    const sleep = metrics.map(m => m.sleep);
+    const calories = metrics.map(m => m.calories);
+
+    const ctx = document.getElementById("metricChart");
+
+    if (metricChart) metricChart.destroy();
+
+    metricChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [
+                { label: "Steps", data: steps, borderWidth: 1 },
+                { label: "Water (ml)", data: water, borderWidth: 1 },
+                { label: "Sleep (hrs)", data: sleep, borderWidth: 1 },
+                { label: "Calories", data: calories, borderWidth: 1 }
+            ]
+        }
+    });
+}
