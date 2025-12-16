@@ -1,21 +1,20 @@
 /* ============================================================
    UCENPulse – Personal Fitness Tracker
-   Handles:
-   - Activity Logging
-   - Daily Metrics
-   - LocalStorage
-   - Charts (Activity + Metrics)
-   - Recent Activity List
-   - Range Filters
+   Client-side JavaScript (ES6+)
 ============================================================ */
 
-//helpers
+/* -------------------------
+   Local Storage Helpers
+-------------------------- */
 const getStored = (key) => JSON.parse(localStorage.getItem(key)) || [];
-const saveStored = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+const saveStored = (key, data) =>
+    localStorage.setItem(key, JSON.stringify(data));
 
-//DOM Elements
+/* -------------------------
+   DOM Elements
+-------------------------- */
 const activityForm = document.getElementById("activity-form");
-const  metricsForm = document.getElementById("metrics-form");
+const metricsForm = document.getElementById("metrics-form");
 
 const recentList = document.getElementById("recent-list");
 const activityStatus = document.getElementById("activity-status");
@@ -23,152 +22,210 @@ const metricStatus = document.getElementById("metric-status");
 
 const rangeButtons = document.querySelectorAll("[data-range]");
 
-let activityChart;
-let metricsChart;
+/* -------------------------
+   Chart Instances
+-------------------------- */
+let activityChart = null;
+let metricChart = null;
+let currentRange = 7;
 
-//Activity Logging
+/* ============================================================
+   ACTIVITY FORM
+============================================================ */
 activityForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const activityType = document.querySelector("input[name='activityType']:checked")?.value;
-    const duration = document.getElementById("duration").value.trim();
+    const activityType = document.querySelector(
+        "input[name='activityType']:checked"
+    )?.value;
+
+    const duration = Number(
+        document.getElementById("duration").value
+    );
+
     const notes = document.getElementById("activity-notes").value.trim();
 
-    if (!activityForm || !duration) {
-        activityStatus.textContent = "please fill in all required fields";
+    if (!activityType || !duration) {
+        activityStatus.textContent =
+            "Please select an activity and enter a duration.";
         return;
     }
 
-    const newEntry = {
+    const newActivity = {
         type: activityType,
-        duration: Number(duration),
+        duration,
         notes,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
     };
 
     const activities = getStored("activities");
-    activities.push(newEntry);
+    activities.push(newActivity);
     saveStored("activities", activities);
 
-    activityStatus.textContent = "Activities added!";
+    activityStatus.textContent = "Activity logged successfully.";
     activityForm.reset();
+
     updateRecentActivity();
     updateActivityChart();
 });
 
-//Health Metrics Logging
+/* ============================================================
+   METRICS FORM
+============================================================ */
 metricsForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const entry = {
-        steps: Numbers(document.getElementById("steps").value) || 0,
-        water: Numbers(document.getElementById("water").value) || 0,
-        sleep: Numbers(document.getElementById("sleep").value) || 0,
-        calories: Numbers(document.getElementById("calories").value) || 0,
-        date: new Date().toISOString()
-
+    const metricEntry = {
+        steps: Number(document.getElementById("steps").value) || 0,
+        water: Number(document.getElementById("water").value) || 0,
+        sleep: Number(document.getElementById("sleep").value) || 0,
+        calories: Number(document.getElementById("calories").value) || 0,
+        date: new Date().toISOString(),
     };
 
     const metrics = getStored("metrics");
-    metrics.push(entry);
+    metrics.push(metricEntry);
     saveStored("metrics", metrics);
 
-    metricStatus.textContent = "Metrics saved!";
+    metricStatus.textContent = "Health metrics saved.";
     metricsForm.reset();
+
     updateMetricChart();
 });
-//Recent Activity List
+
+/* ============================================================
+   RECENT ACTIVITY LIST
+============================================================ */
 function updateRecentActivity() {
-    const activities = getStored("activities").slice(-5).reverse(); // Last 5 entries
+    const activities = getStored("activities")
+        .slice(-5)
+        .reverse();
+
     recentList.innerHTML = "";
 
     if (activities.length === 0) {
-        recentList.innerHTML = "<li>No activities logged yet.</li>";
+        recentList.innerHTML = "<li>No activity logged yet.</li>";
         return;
     }
 
     activities.forEach((act) => {
         const li = document.createElement("li");
         li.innerHTML = `
-            <strong>${act.type}</strong> – ${act.duration} mins 
-            <br><small>${new Date(act.date).toLocaleString()}</small>
+            <strong>${act.type}</strong> – ${act.duration} mins
+            <br>
+            <small>${new Date(act.date).toLocaleString()}</small>
         `;
         recentList.appendChild(li);
     });
 }
 
-//Range Filtering Utility
+/* ============================================================
+   RANGE FILTER
+============================================================ */
 function filterByRange(data, days) {
     const now = Date.now();
     const limit = days * 24 * 60 * 60 * 1000;
 
-    return data.filter(item => now - new Date(item.date).getTime() <= limit);
+    return data.filter(
+        (item) =>
+            now - new Date(item.date).getTime() <= limit
+    );
 }
 
-let currentRange = 7; // default
-
-rangeButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-        currentRange = Number(btn.dataset.range);
+rangeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        currentRange = Number(button.dataset.range);
         updateActivityChart();
         updateMetricChart();
     });
 });
 
-//Activity Chart (Duration Over Time)
+/* ============================================================
+   ACTIVITY CHART
+============================================================ */
 function updateActivityChart() {
-    const activities = filterByRange(getStored("activities"), currentRange);
+    const activities = filterByRange(
+        getStored("activities"),
+        currentRange
+    );
 
-    const labels = activities.map(a => new Date(a.date).toLocaleDateString());
-    const data = activities.map(a => a.duration);
+    if (activities.length === 0) return;
 
-    const ctx = document.getElementById("activityChart");
+    const ctx = document
+        .getElementById("activityChart")
+        .getContext("2d");
 
-    if (activityChart) activityChart.destroy();
+    if (activityChart instanceof Chart) {
+        activityChart.destroy();
+    }
 
     activityChart = new Chart(ctx, {
         type: "line",
         data: {
-            labels,
-            datasets: [{
-                label: "Duration (minutes)",
-                data,
-                borderWidth: 2
-            }]
-        }
+            labels: activities.map((a) =>
+                new Date(a.date).toLocaleDateString()
+            ),
+            datasets: [
+                {
+                    label: "Duration (minutes)",
+                    data: activities.map((a) => a.duration),
+                    borderWidth: 2,
+                },
+            ],
+        },
     });
 }
 
-//Metrics Chart (Steps, Water, Sleep, Calories)
+/* ============================================================
+   METRICS CHART
+============================================================ */
 function updateMetricChart() {
-    const metrics = filterByRange(getStored("metrics"), currentRange);
+    const metrics = filterByRange(
+        getStored("metrics"),
+        currentRange
+    );
 
-    const labels = metrics.map(m => new Date(m.date).toLocaleDateString());
+    if (metrics.length === 0) return;
 
-    const steps = metrics.map(m => m.steps);
-    const water = metrics.map(m => m.water);
-    const sleep = metrics.map(m => m.sleep);
-    const calories = metrics.map(m => m.calories);
+    const ctx = document
+        .getElementById("metricChart")
+        .getContext("2d");
 
-    const ctx = document.getElementById("metricChart");
-
-    if (metricChart) metricChart.destroy();
+    if (metricChart instanceof Chart) {
+        metricChart.destroy();
+    }
 
     metricChart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels,
+            labels: metrics.map((m) =>
+                new Date(m.date).toLocaleDateString()
+            ),
             datasets: [
-                { label: "Steps", data: steps, borderWidth: 1 },
-                { label: "Water (ml)", data: water, borderWidth: 1 },
-                { label: "Sleep (hrs)", data: sleep, borderWidth: 1 },
-                { label: "Calories", data: calories, borderWidth: 1 }
-            ]
-        }
+                {
+                    label: "Steps",
+                    data: metrics.map((m) => m.steps),
+                },
+                {
+                    label: "Water (ml)",
+                    data: metrics.map((m) => m.water),
+                },
+                {
+                    label: "Sleep (hrs)",
+                    data: metrics.map((m) => m.sleep),
+                },
+                {
+                    label: "Calories",
+                    data: metrics.map((m) => m.calories),
+                },
+            ],
+        },
     });
 }
 
-//Initialise App
+/* ============================================================
+   INITIALISE
+============================================================ */
 updateRecentActivity();
 updateActivityChart();
 updateMetricChart();
