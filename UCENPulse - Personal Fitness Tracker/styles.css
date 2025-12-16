@@ -1,0 +1,156 @@
+:root {
+    --primary: #0057b8;
+    --primary-dark: #003f84;
+    --accent: #00a8e8;
+    --bg: #f5f7fa;
+    --white: #ffffff;
+    --text: #1e1e1e;
+    --text-light: #555;
+
+    --radius: 8px;
+    --shadow: 0 3px 8px rgba(0,0,0,0,1);
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    margin: 0;
+    padding: 0%;
+    color: var(--text);
+}
+
+header, footer {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 1.5rem;
+}
+
+section {
+    background: var(--white);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+h1, h2, h3 {
+    margin-top: 0;
+}
+
+form {
+    display: grid;
+    gap: 1.2rem;
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+legend {
+    font-weight: bold;
+}
+
+.form-group {
+    display: grid;
+    gap: 0.3rem;
+}
+
+input[type="number"],
+textarea {
+    padding: 0.6rem;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: var(--primary-dark);
+}
+
+/* Status messages */
+#activity-status,
+#metric-status {
+    font-size: 0.9rem;
+    color: var(--accent);
+}
+
+.range-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.range-buttons button {
+    background: var(--accent);
+}
+
+.range-buttons button:hover {
+    background: #008dbf;
+}
+
+canvas {
+    width: 100% !important;
+    max-height: 320px;
+    margin-top: 1rem;
+}
+
+#recent-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#recent-list li {
+    background: var(--bg);
+    padding: 0.9rem;
+    margin-bottom: 0.6rem;
+    border-radius: var(--radius);
+    border-left: 5px solid var(--primary);
+    box-shadow: var(--shadow);
+}
+
+@media (min-width: 768px) {
+    form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-group,
+    fieldset,
+    button {
+        grid-column: span 2;
+    }
+}
+
+@media (min-width: 1000px) {
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
