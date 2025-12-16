@@ -55,3 +55,25 @@ activityForm.addEventListener("submit", (e) => {
     updateRecentActivity();
     updateActivityChart();
 });
+
+//Health Metrics Logging
+metricsForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const entry = {
+        steps: Numbers(document.getElementById("steps").value) || 0,
+        water: Numbers(document.getElementById("water").value) || 0,
+        sleep: Numbers(document.getElementById("sleep").value) || 0,
+        calories: Numbers(document.getElementById("calories").value) || 0,
+        date: new Date().toISOString()
+
+    };
+
+    const metrics = getStored("metrics");
+    metrics.push(entry);
+    saveStored("metrics", metrics);
+
+    metricStatus.textContent = "Metrics saved!";
+    metricsForm.reset();
+    updateMetricChart();
+});
