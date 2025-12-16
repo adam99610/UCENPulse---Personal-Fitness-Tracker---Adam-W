@@ -96,3 +96,21 @@ function updateRecentActivity() {
         recentList.appendChild(li);
     });
 }
+
+//Range Filtering Utility
+function filterByRange(data, days) {
+    const now = Date.now();
+    const limit = days * 24 * 60 * 60 * 1000;
+
+    return data.filter(item => now - new Date(item.date).getTime() <= limit);
+}
+
+let currentRange = 7; // default
+
+rangeButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        currentRange = Number(btn.dataset.range);
+        updateActivityChart();
+        updateMetricChart();
+    });
+});
